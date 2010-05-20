@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Net;
 using DevDefined.OAuth.Consumer;
+using DevDefined.OAuth.Framework;
+using DevDefined.OAuth.Utility;
 using NUnit.Framework;
 using XeroScreencast.Helpers;
 
@@ -40,8 +42,7 @@ namespace XeroScreencast.Tests
             string contactEmail = contactName.Replace(' ', '-');
 
             string postContactRequestBody = string.Format("<Contacts><Contact><Name></Name><EmailAddress>{0}@nowhere.com</EmailAddress></Contact></Contacts>", contactEmail);
-            string postContactResponse = string.Empty;
-            string postContactError = string.Empty;
+            string postContactResponseBody = string.Empty;
             
             IConsumerRequest postContactRequest = ConsumerSessionFactory.CreatePrivateConsumerSession()
              .Request()
@@ -50,16 +51,26 @@ namespace XeroScreencast.Tests
              .WithFormParameters(new { xml = postContactRequestBody })
              .SignWithToken(ConsumerSessionFactory.CreatePrivateAccessToken());
 
-            // This will capture the response message, if a WebException is thrown
-            postContactRequest.ResponseBodyAction = (response => postContactError = response);
+            try
+            {
+                postContactResponseBody = postContactRequest.ToString();
+            }
+            catch (OAuthException ex)
+            {
+                Assert.Fail(string.Format("An OAuth Exception occurred: {0}", ex.Report));
+            }
+            catch (WebException ex)
+            {
+                postContactResponseBody = ex.Response.GetResponseStream().ReadToEnd();
+            }
 
-            // The empty contact name should cause the request to throw an http 400 error. 
-            Assert.Throws<WebException>(() => postContactResponse = postContactRequest.ToString());
+            // Even if an error occurs, the response body should have been captured
+            Assert.IsNotEmpty(postContactResponseBody);
 
-            Console.WriteLine("Error Number : " + postContactError.ReadSingleNode(@"/ApiException/ErrorNumber"));
-            Console.WriteLine("Error Message : " + postContactError.ReadSingleNode(@"/ApiException/Message"));
+            Console.WriteLine("Error Number : " + postContactResponseBody.ReadSingleNode(@"/ApiException/ErrorNumber"));
+            Console.WriteLine("Error Message : " + postContactResponseBody.ReadSingleNode(@"/ApiException/Message"));
 
-            foreach (string validationError in postContactError.ReadNodes(@"/ApiException/Elements/DataContractBase/ValidationErrors/ValidationError"))
+            foreach (string validationError in postContactResponseBody.ReadNodes(@"/ApiException/Elements/DataContractBase/ValidationErrors/ValidationError"))
             {
                 Console.WriteLine("Validation Error : " + validationError);
             }

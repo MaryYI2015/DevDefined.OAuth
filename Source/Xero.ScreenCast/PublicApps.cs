@@ -5,6 +5,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using DevDefined.OAuth.Consumer;
 using DevDefined.OAuth.Framework;
+using DevDefined.OAuth.Utility;
 using XeroScreencast.Helpers;
 
 namespace XeroScreencast
@@ -120,7 +121,7 @@ namespace XeroScreencast
             }
             catch (WebException ex)
             {
-                putContactResponse = ex.Response.ResponseBody();
+                putContactResponse = ex.Response.GetResponseStream().ReadToEnd();
 
                 Console.WriteLine("A WebException was caught:");
                 Console.WriteLine(putContactResponse);
@@ -163,7 +164,7 @@ namespace XeroScreencast
             }
             catch (WebException ex)
             {
-                putContactResponse = ex.Response.ResponseBody();
+                putContactResponse = ex.Response.GetResponseStream().ReadToEnd();
 
                 Console.WriteLine("A WebException was caught:");
                 Console.WriteLine(putContactResponse);
