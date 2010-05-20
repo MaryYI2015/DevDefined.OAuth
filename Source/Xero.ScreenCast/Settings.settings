@@ -1,0 +1,15 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="XeroScreencast" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="RequestTokenURI" Type="System.Uri" Scope="User">
+      <Value Profile="(Default)">https://api.xero.com/oauth/RequestToken</Value>
+    </Setting>
+    <Setting Name="AuthoriseURI" Type="System.Uri" Scope="User">
+      <Value Profile="(Default)">https://api.xero.com/oauth/Authorize</Value>
+    </Setting>
+    <Setting Name="AccessTokenURI" Type="System.Uri" Scope="User">
+      <Value Profile="(Default)">https://api.xero.com/oauth/AccessToken</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
