@@ -32,6 +32,7 @@ using System.Net;
 using System.Web;
 using System.Xml.Linq;
 using DevDefined.OAuth.Framework;
+using DevDefined.OAuth.Utility;
 
 namespace DevDefined.OAuth.Consumer
 {
@@ -60,17 +61,12 @@ namespace DevDefined.OAuth.Consumer
 
     public XDocument ToDocument()
     {
-      return FromStream(stream => XDocument.Load(new StreamReader(stream)));
+      return XDocument.Parse(ToString());
     }
 
     public byte[] ToBytes()
     {
-      return FromStream(delegate(Stream stream)
-        {
-          var buffer = new byte[stream.Length];
-          stream.Read(buffer, 0, buffer.Length);
-          return buffer;
-        });
+      return Convert.FromBase64String(ToString());
     }
 
     public virtual HttpWebRequest ToWebRequest()
@@ -245,17 +241,16 @@ namespace DevDefined.OAuth.Consumer
 
     public string RequestBody { get; set; }
 
+    private string ResponseBody { get; set; }
+
     public override string ToString()
     {
-      return FromStream(stream => new StreamReader(stream).ReadToEnd());
-    }
-
-    T FromStream<T>(Func<Stream, T> streamParser)
-    {
-      using (Stream stream = ToWebResponse().GetResponseStream())
+      if (string.IsNullOrEmpty(ResponseBody))
       {
-        return streamParser(stream);
+        ResponseBody = ToWebResponse().ReadToEnd();
       }
+            
+      return ResponseBody;
     }
 
     void EnsureRequestHasNotBeenSignedYet()
