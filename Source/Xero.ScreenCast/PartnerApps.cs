@@ -19,7 +19,7 @@ namespace XeroScreencast
 
         // Load the OAuth signing certificate (with private key) from disk using the password used to create it
         private static readonly X509Certificate2 OAuthSigningCertificate = new X509Certificate2(@"..\..\..\..\Certificates\public_privatekey.pfx", "passw0rd");
-        
+
         // Load the Client SSL Certificate as a LocalFileCertificateFactory
         private readonly static LocalFileCertificateFactory ClientSslCertificateFactory = new LocalFileCertificateFactory(@"..\..\..\..\Certificates\EnTrust-D4.p12", "xero");
 
