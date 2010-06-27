@@ -1,0 +1,9 @@
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreenCast\bin\Debug\XeroScreencast.exe.config
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreenCast\bin\Debug\XeroScreencast.exe
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreenCast\bin\Debug\XeroScreencast.pdb
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreenCast\bin\Debug\DevDefined.OAuth.dll
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreenCast\bin\Debug\nunit.framework.dll
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreenCast\bin\Debug\DevDefined.OAuth.pdb
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreenCast\obj\Debug\ResolveAssemblyReference.cache
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreenCast\obj\Debug\XeroScreencast.exe
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreenCast\obj\Debug\XeroScreencast.pdb
