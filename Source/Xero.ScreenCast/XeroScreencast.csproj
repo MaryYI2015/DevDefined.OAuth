@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ConsumerSessionFactory.cs" />
     <Compile Include="Helpers\StringExtensions.cs" />
+    <Compile Include="PartnerApps.cs" />
     <Compile Include="PrivateApps.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="PublicApps.cs" />

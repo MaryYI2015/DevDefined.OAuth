@@ -6,11 +6,10 @@ using System.Xml.XPath;
 using DevDefined.OAuth.Consumer;
 using DevDefined.OAuth.Framework;
 using DevDefined.OAuth.Utility;
-using XeroScreencast.Helpers;
 
 namespace XeroScreencast
 {
-    class PublicApps
+    internal sealed class PublicApps
     {
         public static void Run()
         {

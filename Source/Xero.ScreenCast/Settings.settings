@@ -11,5 +11,11 @@
     <Setting Name="AccessTokenURI" Type="System.Uri" Scope="User">
       <Value Profile="(Default)">https://api.xero.com/oauth/AccessToken</Value>
     </Setting>
+    <Setting Name="PartnerRequestTokenURI" Type="System.Uri" Scope="User">
+      <Value Profile="(Default)">https://api-partner.network.xero.com/oauth/RequestToken</Value>
+    </Setting>
+    <Setting Name="PartnerAccessTokenURI" Type="System.Uri" Scope="User">
+      <Value Profile="(Default)">https://api-partner.network.xero.com/oauth/AccessToken</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

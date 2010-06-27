@@ -8,8 +8,9 @@ namespace XeroScreencast
         public static void Main(string[] args)
         {
             Console.WriteLine("Do you want to run as a public or private application?");
-            Console.WriteLine(" Enter 1 for a public application");
-            Console.WriteLine(" Enter 2 for a private application");
+            Console.WriteLine(" Press 1 for a public application");
+            Console.WriteLine(" Press 2 for a private application");
+            Console.WriteLine(" Press 3 for a private application");
 
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             Console.WriteLine();
@@ -23,6 +24,11 @@ namespace XeroScreencast
             {
                 Console.WriteLine("Running as a private application...");
                 PrivateApps.Run();
+            } 
+            if (keyInfo.KeyChar == '3')
+            {
+                Console.WriteLine("Running as a partner application...");
+                PartnerApps.Run();
             }
 
             Console.WriteLine("");

@@ -1,16 +1,14 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Xml.Linq;
 using System.Xml.XPath;
 using DevDefined.OAuth.Consumer;
 using DevDefined.OAuth.Framework;
 using DevDefined.OAuth.Utility;
-using XeroScreencast.Helpers;
 
 namespace XeroScreencast
 {
-    class PrivateApps
+    internal sealed class PrivateApps
     {
 
         public static void Run()

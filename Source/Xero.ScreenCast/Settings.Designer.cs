@@ -58,5 +58,29 @@ namespace XeroScreencast {
                 this["AccessTokenURI"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://api-partner.network.xero.com/oauth/RequestToken")]
+        public global::System.Uri PartnerRequestTokenURI {
+            get {
+                return ((global::System.Uri)(this["PartnerRequestTokenURI"]));
+            }
+            set {
+                this["PartnerRequestTokenURI"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://api-partner.network.xero.com/oauth/AccessToken")]
+        public global::System.Uri PartnerAccessTokenURI {
+            get {
+                return ((global::System.Uri)(this["PartnerAccessTokenURI"]));
+            }
+            set {
+                this["PartnerAccessTokenURI"] = value;
+            }
+        }
     }
 }
