@@ -84,7 +84,7 @@ namespace DevDefined.OAuth.Framework
             new Exception(
               string.Format(
                 "Request for uri: {0} failed.\r\nstatus code: {1}\r\nheaders: {2}\r\nbody:\r\n{3}",
-                response.ResponseUri, response.StatusCode, response.Headers, body));
+                response.ResponseUri, response.StatusCode, response.Headers, body), innerException);
         }
       }
 

@@ -10,7 +10,7 @@ namespace XeroScreencast
             Console.WriteLine("Do you want to run as a public or private application?");
             Console.WriteLine(" Press 1 for a public application");
             Console.WriteLine(" Press 2 for a private application");
-            Console.WriteLine(" Press 3 for a private application");
+            Console.WriteLine(" Press 3 for a partner application");
 
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             Console.WriteLine();
