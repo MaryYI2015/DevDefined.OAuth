@@ -87,7 +87,7 @@ namespace DevDefined.OAuth.Provider
     }
 
     public virtual void AccessProtectedResourceRequest(IOAuthContext context)
-    {
+   {
       InspectRequest(ProviderPhase.AccessProtectedResourceRequest, context);
 
       _tokenStore.ConsumeAccessToken(context);
@@ -96,18 +96,6 @@ namespace DevDefined.OAuth.Provider
       public IToken RenewAccessToken(IOAuthContext context)
       {
           InspectRequest(ProviderPhase.RenewAccessToken, context);
-
-          _tokenStore.ConsumeAccessToken(context);
-
-          /*switch (_tokenStore.GetStatusOfRequestForAccess(context))
-          {
-              case RequestForAccessStatus.Granted:
-                  break;
-              case RequestForAccessStatus.Unknown:
-                  throw Error.ConsumerHasNotBeenGrantedAccessYet(context);
-              default:
-                  throw Error.ConsumerHasBeenDeniedAccess(context);
-          }*/
 
           return _tokenStore.RenewAccessToken(context);
       }
