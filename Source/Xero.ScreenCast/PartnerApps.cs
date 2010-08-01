@@ -14,7 +14,7 @@ namespace XeroScreencast
     {
 
         private const string PartnerConsumerKey = "ZWVJMWFMNZJMYJG0NDRIY2IYZGIWMZ";
-        private const string PartnerConsumerSecret = "F84MMGTUZVO7DHXUVXD21SGFX9UQ0Z";
+        private const string PartnerConsumerSecret = "NOT_ACTUALLY_USED_WHEN_USING_RSA-SHA1_SIGNING";
         private const string PartnerUserAgentString = "Xero.API.ScreenCast v1.0 (Partner App Testing)";
 
         // Load the OAuth signing certificate (with private key) from disk using the password used to create it
@@ -22,6 +22,8 @@ namespace XeroScreencast
 
         // Load the Client SSL Certificate as a LocalFileCertificateFactory
         private readonly static LocalFileCertificateFactory ClientSslCertificateFactory = new LocalFileCertificateFactory(@"..\..\..\..\Certificates\EnTrust-D4.p12", "xero");
+        
+
 
         public static void Run()
         {
@@ -55,7 +57,8 @@ namespace XeroScreencast
             }
             catch (Exception ex)
             {
-                throw new ApplicationException("The request token could not be obtained from the Xero API server", ex);
+                System.Windows.Forms.MessageBox.Show(ex.ToString());
+                return;
             }
 
             Console.WriteLine("Request Token Key: {0}", requestToken.Token);
@@ -81,11 +84,11 @@ namespace XeroScreencast
 
 
             // 4. Use the request token and verification code to get an access token
-            IToken accessToken;
+            TokenBase accessToken;
 
             try
             {
-                accessToken = consumerSession.ExchangeRequestTokenForAccessToken(requestToken, verificationCode);
+                accessToken = (TokenBase)consumerSession.ExchangeRequestTokenForAccessToken(requestToken, verificationCode);
             }
             catch (OAuthException ex)
             {
@@ -109,9 +112,25 @@ namespace XeroScreencast
 
             if (getOrganisationResponse != string.Empty)
             {
-                var organisationXml = XElement.Parse(getOrganisationResponse);
+                XElement organisationXml = XElement.Parse(getOrganisationResponse);
                 string organisationName = organisationXml.XPathSelectElement("//Organisation/Name").Value;
                 Console.WriteLine(string.Format("You have been authorised against organisation: {0}", organisationName));
+            }
+
+
+            // 5.1 Refresh the access token using the session handle
+            try
+            {
+                accessToken = (TokenBase)consumerSession.RenewAccessToken(accessToken, accessToken.SessionHandle);
+
+                Console.WriteLine("The access token has been refreshed");
+                Console.WriteLine("New Access Token: " + accessToken.Token);
+                Console.WriteLine("New Access Secret: " + accessToken.TokenSecret);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("The access token could not be refreshed:\r\n" + ex);
+                return;
             }
 
 
