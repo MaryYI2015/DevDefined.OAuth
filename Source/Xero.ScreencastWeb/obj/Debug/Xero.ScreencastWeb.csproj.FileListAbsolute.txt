@@ -1,0 +1,7 @@
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreencastWeb\bin\Xero.ScreencastWeb.dll
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreencastWeb\bin\Xero.ScreencastWeb.pdb
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreencastWeb\obj\Debug\ResolveAssemblyReference.cache
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreencastWeb\obj\Debug\Xero.ScreencastWeb.dll
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreencastWeb\obj\Debug\Xero.ScreencastWeb.pdb
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreencastWeb\bin\DevDefined.OAuth.dll
+D:\XeroAPI-github\DevDefined.OAuth\Source\Xero.ScreencastWeb\bin\DevDefined.OAuth.pdb
