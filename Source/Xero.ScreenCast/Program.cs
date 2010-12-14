@@ -11,6 +11,7 @@ namespace XeroScreencast
             Console.WriteLine(" Press 1 for a public application");
             Console.WriteLine(" Press 2 for a private application");
             Console.WriteLine(" Press 3 for a partner application");
+            Console.WriteLine(" Press 4 for a load testing");
 
             ConsoleKeyInfo keyInfo = Console.ReadKey(true);
             Console.WriteLine();
@@ -29,6 +30,11 @@ namespace XeroScreencast
             {
                 Console.WriteLine("Running as a partner application...");
                 PartnerApps.Run();
+            }
+            if (keyInfo.KeyChar == '4')
+            {
+                Console.WriteLine("Running load tests...");
+                LoadTesting.Run();
             }
 
             Console.WriteLine("");

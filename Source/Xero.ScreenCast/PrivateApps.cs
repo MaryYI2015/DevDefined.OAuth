@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Xml.Linq;
 using System.Xml.XPath;
@@ -33,6 +34,30 @@ namespace XeroScreencast
                 Console.WriteLine(string.Format("You have been authorised against organisation: {0}", organisationName));
             }
 
+            // 5.5 Call GET Invoices using a filter
+            IConsumerRequest getInvoicesRequest = consumerSession
+                .Request()
+                .ForMethod("GET")
+                .ForUri(new Uri("https://api.xero.com/api.xro/2.0/Invoices"))
+                .WithHeaders(new Dictionary<string, string> { { "If-Modified-Since", new DateTime(2000, 3, 1).ToString("yyyy-MM-dd") } })
+                .SignWithToken(accessToken);
+                
+            string getInvoicesResponse = getInvoicesRequest.ToString();
+
+            if (getInvoicesResponse != string.Empty)
+            {
+                var invoicesXml = XElement.Parse(getInvoicesResponse);
+                
+                foreach (var invoiceNode in invoicesXml.XPathSelectElements("//Invoice"))
+                {
+                    var invoiceNumberNode = invoiceNode.XPathSelectElement("InvoiceNumber");
+                    var invoiceDateNode = invoiceNode.XPathSelectElement("Date");
+
+                    if (invoiceNumberNode != null && invoiceDateNode != null)
+                        Console.WriteLine(string.Format("Invoice Number {0} was created on {1}", invoiceNumberNode.Value, invoiceDateNode.Value));
+                }
+            }
+            
 
             // 6. Make a PUT call to the API - add a dummy contact
             Console.WriteLine("Please enter the name of a new contact to add to Xero");

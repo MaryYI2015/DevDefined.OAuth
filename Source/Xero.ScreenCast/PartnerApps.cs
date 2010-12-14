@@ -57,7 +57,7 @@ namespace XeroScreencast
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show(ex.ToString());
+                Console.WriteLine(ex.ToString());
                 return;
             }
 
@@ -129,7 +129,7 @@ namespace XeroScreencast
             }
             catch (Exception ex)
             {
-                System.Windows.Forms.MessageBox.Show("The access token could not be refreshed:\r\n" + ex);
+                Console.WriteLine("The access token could not be refreshed:\r\n" + ex);
                 return;
             }
 
