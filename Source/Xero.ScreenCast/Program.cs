@@ -31,11 +31,6 @@ namespace XeroScreencast
                 Console.WriteLine("Running as a partner application...");
                 PartnerApps.Run();
             }
-            if (keyInfo.KeyChar == '4')
-            {
-                Console.WriteLine("Running load tests...");
-                LoadTesting.Run();
-            }
 
             Console.WriteLine("");
             Console.WriteLine(" Press Enter to Exit");
