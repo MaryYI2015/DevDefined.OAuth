@@ -31,4 +31,10 @@
     </div>
     <% } %>
     
+    <p>
+        Note, This website is currently running under the user <strong><%=Environment.UserDomainName %>\<%=Environment.UserName %></strong>. 
+        If this website needs to access certificates in the local machine store, this user (or a group containing this user) must have access 
+        to any certificates that this website uses.
+    </p>
+    
 </asp:Content>

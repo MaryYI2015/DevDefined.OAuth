@@ -1,10 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Web.SessionState;
+
 using DevDefined.OAuth.Consumer;
 using DevDefined.OAuth.Framework;
 using DevDefined.OAuth.Utility;
@@ -16,6 +19,72 @@ namespace Xero.ScreencastWeb.Services
     public class ApiRepository
     {
 
+        static ApiRepository()
+        {
+            ServicePointManager.ServerCertificateValidationCallback += ValidateRemoteCertificate;
+            //ServicePointManager.Expect100Continue = true;
+            //ServicePointManager.CheckCertificateRevocationList = false;
+            //ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls;
+        }
+
+        private static bool ValidateRemoteCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Gets the OAuth signing certificate from the local certificate store, if specfified in app.config.
+        /// </summary>
+        /// <returns></returns>
+        public AsymmetricAlgorithm GetOAuthSigningCertificate()
+        {
+            string oauthCertificateFindType = ConfigurationManager.AppSettings["XeroApiOAuthCertificateFindType"];
+            string oauthCertificateFindValue = ConfigurationManager.AppSettings["XeroApiOAuthCertificateFindValue"];
+
+            X509FindType x509FindType = (X509FindType)Enum.Parse(typeof (X509FindType), oauthCertificateFindType);
+
+            // Search the LocalMachine certificate store for matching X509 certificates.
+            X509Store certStore = new X509Store("My", StoreLocation.LocalMachine);
+            certStore.Open(OpenFlags.ReadOnly | OpenFlags.OpenExistingOnly);
+            X509Certificate2Collection certificateCollection = certStore.Certificates.Find(x509FindType, oauthCertificateFindValue, false);
+            certStore.Close();
+
+            if (certificateCollection.Count == 0)
+            {
+                throw new ApplicationException("The specified subject does not match a certificate in the local certificate store");
+            }
+
+            if (!certificateCollection[0].HasPrivateKey)
+            {
+                throw new ApplicationException("The specified subject matched a certificate, but there is not private key stored with the certificate");
+            }
+
+            return certificateCollection[0].PrivateKey;
+        }
+
+        /// <summary>
+        /// Return a CertificateFactory that can read the Client SSL certificate from the local machine certificate store
+        /// </summary>
+        /// <returns></returns>
+        public ICertificateFactory GetClientSslCertificateFactory()
+        {
+            string oauthCertificateFindType = ConfigurationManager.AppSettings["XeroApiSslCertificateFindType"];
+            string oauthCertificateFindValue = ConfigurationManager.AppSettings["XeroApiSslCertificateFindValue"];
+
+            if (string.IsNullOrEmpty(oauthCertificateFindType) || string.IsNullOrEmpty(oauthCertificateFindValue))
+            {
+                return new NullCertificateFactory();
+            }
+
+            X509FindType x509FindType = (X509FindType)Enum.Parse(typeof(X509FindType), oauthCertificateFindType);
+            ICertificateFactory certificateFactory = new LocalMachineCertificateFactory(oauthCertificateFindValue, x509FindType);
+
+            Debug.Assert(certificateFactory.CreateCertificate() != null);
+
+            return certificateFactory;
+        }
+        
+
         public IOAuthConsumerContext GetConsumerContext()
         {
             OAuthConsumerContext consumerContext = new OAuthConsumerContext()
@@ -24,7 +93,8 @@ namespace Xero.ScreencastWeb.Services
                 ConsumerSecret = ConfigurationManager.AppSettings["XeroApiConsumerSecret"],
                 SignatureMethod = ConfigurationManager.AppSettings["XeroApiSignatureMethod"],
                 UseHeaderForOAuthParameters = true,
-                UserAgent = string.Format("Xero.API.ScreenCastWeb v1.0")
+                UserAgent = string.Format("Xero.API.ScreenCastWeb v1.0"),
+                Key = GetOAuthSigningCertificate()
             };
 
             return consumerContext;
@@ -39,6 +109,9 @@ namespace Xero.ScreencastWeb.Services
                 ConfigurationManager.AppSettings["XeroApiAuthorisationEndpoint"],
                 ConfigurationManager.AppSettings["XeroApiAccessTokenEndpoint"],
                 ConfigurationManager.AppSettings["XeroApiCallbackUrl"]);
+
+            // Replace the default ConsumerRequestFactory with one that can construct a ConsumerRequest with Client SSL certificates.
+            oAuthSession.ConsumerRequestFactory = new ClientCertEnabledConsumerRequestFactory(GetClientSslCertificateFactory());
 
             return oAuthSession;
         }

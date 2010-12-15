@@ -63,7 +63,14 @@ namespace Xero.ScreencastWeb.Controllers
             // Call api.xero.com/oauth/AccessToken
             IOAuthSession oauthSession = apiRepository.GetOAuthSession();
 
-            IToken accessToken = oauthSession.ExchangeRequestTokenForAccessToken(Session.GetRequestToken(), verificationCode);
+            var requestToken = Session.GetRequestToken();
+
+            if (requestToken == null)
+            {
+                throw new ApplicationException("The request token could not be retrived from the current http session. Is session state and cookies enabled?");
+            }
+
+            IToken accessToken = oauthSession.ExchangeRequestTokenForAccessToken(requestToken, verificationCode);
 
             Session.SetAccessToken(accessToken);
 
