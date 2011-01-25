@@ -47,6 +47,7 @@ namespace DevDefined.OAuth.Framework
     readonly BoundParameter _tokenSecret;
     readonly BoundParameter _verifier;
     readonly BoundParameter _sessionHandle;
+    readonly BoundParameter _expiresIn;
     readonly BoundParameter _version;
     NameValueCollection _authorizationHeaderParameters;
     NameValueCollection _cookies;
@@ -69,6 +70,7 @@ namespace DevDefined.OAuth.Framework
       _tokenSecret = new BoundParameter(Parameters.OAuth_Token_Secret, this);
       _version = new BoundParameter(Parameters.OAuth_Version, this);
       _sessionHandle = new BoundParameter(Parameters.OAuth_Session_Handle, this);
+      _expiresIn = new BoundParameter(Parameters.OAuth_Expires_In, this);
 
       FormEncodedParameters = new NameValueCollection();
       Cookies = new NameValueCollection();
@@ -169,6 +171,12 @@ namespace DevDefined.OAuth.Framework
     {
         get { return _sessionHandle.Value; }
         set { _sessionHandle.Value = value; }
+    }
+
+    public string ExpiresIn
+    {
+      get { return _expiresIn.Value; }
+      set { _expiresIn.Value = value; }
     }
 
     public string CallbackUrl

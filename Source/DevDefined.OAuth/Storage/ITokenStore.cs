@@ -25,6 +25,7 @@
 #endregion
 
 using DevDefined.OAuth.Framework;
+using DevDefined.OAuth.Storage.Basic;
 
 namespace DevDefined.OAuth.Storage
 {
@@ -96,6 +97,6 @@ namespace DevDefined.OAuth.Storage
     /// </summary>
     /// <param name="requestContext">The request context.</param>
     /// <returns>Return a new access token with the same oauth_session_handle as the near-expired session token</returns>
-    IToken RenewAccessToken(IOAuthContext requestContext);
+    AccessToken RenewAccessToken(IOAuthContext requestContext);
   }
 }

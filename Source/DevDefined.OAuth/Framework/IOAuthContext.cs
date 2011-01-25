@@ -22,6 +22,7 @@ namespace DevDefined.OAuth.Framework
     string Version { get; set; }
     string CallbackUrl { get; set; }
     string Verifier { get; set; }
+    string SessionHandle { get; set; }
 
     bool UseAuthorizationHeader { get; set; }
 

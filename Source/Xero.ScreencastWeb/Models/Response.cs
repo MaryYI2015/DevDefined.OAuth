@@ -15,5 +15,7 @@ namespace Xero.ScreencastWeb.Models
         public Organisations Organisations;
 
         public Invoices Invoices;
+
+        public Contacts Contacts;
     }
 }

@@ -11,14 +11,21 @@ namespace Xero.ScreencastWeb.Controllers
 
         public ActionResult Index()
         {
-            ApiListRequest<Invoice> listRequest = new ApiListRequest<Invoice>
+            ApiGetRequest<Invoice> listRequest = new ApiGetRequest<Invoice>
             {
                 OrderByClause = "Date DESC",
                 WhereClause = "AmountDue > 0"
             };
 
             ApiRepository repository = new ApiRepository();
-            var response = repository.ListItems(Session, listRequest);
+            HttpSessionAccessTokenRepository accessTokenRepository = new HttpSessionAccessTokenRepository(Session);
+
+            if (accessTokenRepository.GetToken("") == null)
+            {
+                return new ReturnToHomeResult("There is no access token for the current user. Please click the 'connect' button on the homepage.");
+            }
+
+            Response response = repository.Get(accessTokenRepository, listRequest);
 
             return View(response.Invoices);
         }

@@ -25,6 +25,7 @@
 #endregion
 
 using System;
+using System.Diagnostics;
 using DevDefined.OAuth.Framework;
 
 namespace DevDefined.OAuth.Storage.Basic
@@ -37,6 +38,48 @@ namespace DevDefined.OAuth.Storage.Basic
   {
     public string UserName { get; set; }
     public string[] Roles { get; set; }
-    public DateTime ExpireyDate { get; set; }
+    public string ExpiresIn { get; set; }
+    public string SessionHandle { get; set; }
+    public DateTime CreatedDateUtc { get; set; }
+
+      public DateTime? ExpiryDateUtc
+      {
+          get
+          {
+              if (string.IsNullOrEmpty(ExpiresIn))
+              {
+                  return null;
+              }
+
+              double expiresInSeconds;
+
+              if (!double.TryParse(ExpiresIn, out expiresInSeconds))
+              {
+                  return null;
+              }
+
+              return CreatedDateUtc.AddSeconds(expiresInSeconds);
+          }
+      }
+
+      public bool HasExpired()
+      {
+          // By default, the access token should have more than 15 seconds before it has 'expired'.
+          return HasExpired(new TimeSpan(0, 0, 15));
+      }
+
+      public bool HasExpired(TimeSpan safeMarginTimespan)
+      {
+          // If we don't have an expiry date, we can't determine if the AccessToken has expired or not
+          if (!ExpiryDateUtc.HasValue)
+          {
+              return false;
+          }
+
+          // Take off the safety margin to the token expiry date.
+          DateTime safeExpiryDateUtc = ExpiryDateUtc.Value.Subtract(safeMarginTimespan);
+
+          return (DateTime.UtcNow > safeExpiryDateUtc);
+      }
   }
 }

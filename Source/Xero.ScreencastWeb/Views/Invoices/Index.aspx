@@ -14,9 +14,6 @@
             <th>Invoice Date</th>
             <th>Total</th>
             <th>Amount Due</th>
-            <th>
-                Invoices
-            </th>
         </tr>
 
     <% if (Model != null) { 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 
@@ -45,7 +46,7 @@ namespace DevDefined.OAuth.Consumer
 
             try
             {
-                var certificate = new X509Certificate2(_filename, _password);
+                X509Certificate2 certificate = new X509Certificate2(_filename, _password);
                 Debug.Assert(certificate.Subject != string.Empty);
                 return certificate;
             }

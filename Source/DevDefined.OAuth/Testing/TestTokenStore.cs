@@ -27,6 +27,7 @@
 using System;
 using DevDefined.OAuth.Framework;
 using DevDefined.OAuth.Storage;
+using DevDefined.OAuth.Storage.Basic;
 
 namespace DevDefined.OAuth.Testing
 {
@@ -107,16 +108,16 @@ namespace DevDefined.OAuth.Testing
       return AccessSecret;
     }
 
-    public IToken RenewAccessToken(IOAuthContext requestContext)
+    public AccessToken RenewAccessToken(IOAuthContext requestContext)
     {
       EnsureTestConsumer(requestContext);
-      return new TokenBase { ConsumerKey = "key", Realm = null, Token = "accesskey", TokenSecret = AccessSecret, SessionHandle = requestContext.SessionHandle };
+      return new AccessToken { ConsumerKey = "key", Realm = null, Token = "accesskey", TokenSecret = AccessSecret, SessionHandle = requestContext.SessionHandle };
     }
 
-    public IToken CreateAccessTokenForRequestToken(IOAuthContext requestContext)
+    public AccessToken CreateAccessTokenForRequestToken(IOAuthContext requestContext)
     {
       EnsureTestConsumer(requestContext);
-      return new TokenBase {ConsumerKey = "key", Realm = null, Token = "accesskey", TokenSecret = AccessSecret, SessionHandle = "sessionHandle"};
+      return new AccessToken {ConsumerKey = "key", Realm = null, Token = "accesskey", TokenSecret = AccessSecret, SessionHandle = "sessionHandle"};
     }
 
     static void EnsureTestConsumer(IConsumer consumer)

@@ -29,6 +29,7 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Web;
 using DevDefined.OAuth.Framework;
+using DevDefined.OAuth.Storage.Basic;
 using DevDefined.OAuth.Utility;
 
 namespace DevDefined.OAuth.Consumer
@@ -132,31 +133,33 @@ namespace DevDefined.OAuth.Consumer
       return consumerRequest;
     }
 
-    public IToken GetRequestToken()
+    public RequestToken GetRequestToken()
     {
       return GetRequestToken("GET");
     }
 
-    public IToken ExchangeRequestTokenForAccessToken(IToken requestToken)
+    public AccessToken ExchangeRequestTokenForAccessToken(IToken requestToken)
     {
       return ExchangeRequestTokenForAccessToken(requestToken, "GET", null);
     }
 
-    public IToken ExchangeRequestTokenForAccessToken(IToken requestToken, string verificationCode)
+    public AccessToken ExchangeRequestTokenForAccessToken(IToken requestToken, string verificationCode)
     {
       return ExchangeRequestTokenForAccessToken(requestToken, "GET", verificationCode);
     }
 
-    public IToken ExchangeRequestTokenForAccessToken(IToken requestToken, string method, string verificationCode)
+    public AccessToken ExchangeRequestTokenForAccessToken(IToken requestToken, string method, string verificationCode)
     {
-      TokenBase token = BuildExchangeRequestTokenForAccessTokenContext(requestToken, method, verificationCode)
+      AccessToken token = BuildExchangeRequestTokenForAccessTokenContext(requestToken, method, verificationCode)
         .Select(collection =>
-                new TokenBase
+                new AccessToken
                   {
                     ConsumerKey = requestToken.ConsumerKey,
                     Token = ParseResponseParameter(collection,Parameters.OAuth_Token),
                     TokenSecret = ParseResponseParameter(collection,Parameters.OAuth_Token_Secret),
-                    SessionHandle = ParseResponseParameter(collection, Parameters.OAuth_Session_Handle)
+                    SessionHandle = ParseResponseParameter(collection, Parameters.OAuth_Session_Handle),
+                    ExpiresIn = ParseResponseParameter(collection, Parameters.OAuth_Expires_In),
+                    CreatedDateUtc = DateTime.UtcNow
                   });
 
       AccessToken = token;
@@ -164,21 +167,23 @@ namespace DevDefined.OAuth.Consumer
       return token;
     }
 
-    public IToken RenewAccessToken(IToken accessToken, string sessionHandle)
+    public AccessToken RenewAccessToken(IToken accessToken, string sessionHandle)
     {
         return RenewAccessToken(accessToken, "GET", sessionHandle);
     }
 
-    public IToken RenewAccessToken(IToken accessToken, string method, string sessionHandle)
+    public AccessToken RenewAccessToken(IToken accessToken, string method, string sessionHandle)
     {
-        TokenBase token = BuildRenewAccessTokenContext(accessToken, method, sessionHandle)
+        AccessToken token = BuildRenewAccessTokenContext(accessToken, method, sessionHandle)
           .Select(collection =>
-                  new TokenBase
+                  new AccessToken
                   {
                       ConsumerKey = accessToken.ConsumerKey,
                       Token = ParseResponseParameter(collection, Parameters. OAuth_Token),
                       TokenSecret = ParseResponseParameter(collection,Parameters.OAuth_Token_Secret),
-                      SessionHandle = ParseResponseParameter(collection, Parameters.OAuth_Session_Handle)
+                      SessionHandle = ParseResponseParameter(collection, Parameters.OAuth_Session_Handle),
+                      ExpiresIn = ParseResponseParameter(collection, Parameters.OAuth_Expires_In),
+                      CreatedDateUtc = DateTime.UtcNow
                   });
 
         AccessToken = token;
@@ -289,7 +294,7 @@ namespace DevDefined.OAuth.Consumer
       return this;
     }
 
-    public IToken GetRequestToken(string method)
+    public RequestToken GetRequestToken(string method)
     {
       var results = BuildRequestTokenContext(method).Select(collection =>
         new
@@ -305,7 +310,7 @@ namespace DevDefined.OAuth.Consumer
         throw Error.CallbackWasNotConfirmed();
       }
 
-      return new TokenBase
+      return new RequestToken
         {
           ConsumerKey = results.ConsumerKey,
           Token = results.Token,

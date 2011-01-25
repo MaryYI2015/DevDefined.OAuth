@@ -13,6 +13,8 @@ namespace Xero.ScreencastWeb.Models
 
         public Guid InvoiceID;
 
+        public Contact Contact;
+
         public DateTime Date;
 
         public string Type;

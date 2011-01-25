@@ -35,8 +35,6 @@ namespace DevDefined.OAuth.Framework
 
     public string Token { get; set; }
 
-    public string SessionHandle { get; set; }
-
     public string ConsumerKey { get; set; }
 
     public string Realm { get; set; }

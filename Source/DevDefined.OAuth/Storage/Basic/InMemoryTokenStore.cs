@@ -101,7 +101,7 @@ namespace DevDefined.OAuth.Storage.Basic
     {
       AccessToken accessToken = GetAccessToken(accessContext);
 
-      if (accessToken.ExpireyDate < DateTime.Now)
+      if (accessToken.ExpiryDateUtc < DateTime.UtcNow)
       {
         throw new OAuthException(accessContext, OAuthProblems.TokenExpired,
                                  "Token has expired (they're only valid for 1 minute)");
@@ -152,12 +152,12 @@ namespace DevDefined.OAuth.Storage.Basic
       return token.TokenSecret;
     }
 
-      public IToken RenewAccessToken(IOAuthContext requestContext)
+      public AccessToken RenewAccessToken(IOAuthContext requestContext)
       {
           throw new NotImplementedException();
       }
 
-      public IToken GetToken(IOAuthContext context)
+    public IToken GetToken(IOAuthContext context)
     {
       var token = (IToken) null;
       if (!string.IsNullOrEmpty(context.Token))

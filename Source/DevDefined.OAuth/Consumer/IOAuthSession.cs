@@ -27,6 +27,7 @@
 using System;
 using System.Collections;
 using DevDefined.OAuth.Framework;
+using DevDefined.OAuth.Storage.Basic;
 
 namespace DevDefined.OAuth.Consumer
 {
@@ -40,10 +41,10 @@ namespace DevDefined.OAuth.Consumer
     IToken AccessToken { get; set; }
     IConsumerRequest Request();
     IConsumerRequest Request(IToken accessToken);
-    IToken GetRequestToken();
-    IToken ExchangeRequestTokenForAccessToken(IToken requestToken);
-    IToken ExchangeRequestTokenForAccessToken(IToken requestToken, string verificationCode);
-    IToken ExchangeRequestTokenForAccessToken(IToken requestToken, string method, string verificationCode);
+    RequestToken GetRequestToken();
+    AccessToken ExchangeRequestTokenForAccessToken(IToken requestToken);
+    AccessToken ExchangeRequestTokenForAccessToken(IToken requestToken, string verificationCode);
+    AccessToken ExchangeRequestTokenForAccessToken(IToken requestToken, string method, string verificationCode);
     IConsumerRequest BuildRequestTokenContext(string method);
     IConsumerRequest BuildExchangeRequestTokenForAccessTokenContext(IToken requestToken, string method, string verificationCode);
     string GetUserAuthorizationUrlForToken(IToken token, string callbackUrl);
@@ -58,5 +59,8 @@ namespace DevDefined.OAuth.Consumer
     IOAuthSession WithHeaders(object anonymousClass);
     IOAuthSession RequiresCallbackConfirmation();
     Action<string> ResponseBodyAction { get; set; }
+
+    AccessToken RenewAccessToken(IToken accessToken, string sessionHandle);
+    AccessToken RenewAccessToken(IToken accessToken, string method, string sessionHandle);
   }
 }

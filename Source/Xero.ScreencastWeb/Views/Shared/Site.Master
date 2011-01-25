@@ -1,3 +1,4 @@
+<%@ Import Namespace="Xero.ScreencastWeb.Services"%>
 <%@ Master Language="C#" Inherits="System.Web.Mvc.ViewMasterPage" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -23,7 +24,12 @@
 
                 <ul id="menu">    
                 
-                    <%if(Session["oauth_access_token"] == null) {%>
+                    <%
+                    var accessTokenRepository = new HttpSessionAccessTokenRepository(new HttpSessionStateWrapper(Session));
+                    var accessToken = accessTokenRepository.GetToken("");
+                    %>
+                
+                    <%if(accessToken == null) {%>
                          <li><%=Html.ActionLink("Connect", "Index", "Connect")%></li>
                     <%} else { %>
                         <li><%=Html.ActionLink("Invoices", "Index", "Invoices") %></li>

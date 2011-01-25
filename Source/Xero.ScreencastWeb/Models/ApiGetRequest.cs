@@ -4,11 +4,10 @@ using System.Linq;
 using System.Web;
 
 using DevDefined.OAuth.Consumer;
-using Xero.ScreencastWeb.Models;
 
-namespace Xero.ScreencastWeb.Services
+namespace Xero.ScreencastWeb.Models
 {
-    public class ApiListRequest<TModel>
+    public class ApiGetRequest<TModel>
         where TModel : ModelBase, new()
     {
 

@@ -3,13 +3,15 @@
 <%@ Import Namespace="Xero.ScreencastWeb.Services"%>
 <div>
     <%
-    ApiRepository apiRepository = new ApiRepository();
-    Response response = apiRepository.GetItemByIdOrCode<Organisation>(Session, "");
-   
-    if (response.Status == "OK") {
+    HttpSessionAccessTokenRepository accessTokenRepository = new HttpSessionAccessTokenRepository(new HttpSessionStateWrapper(Session));
+    var accessToken = accessTokenRepository.GetToken("");
+    
+    if (accessToken != null && !accessToken.HasExpired()) {
     %>
-        <span>Connected to: <%=response.Organisations[0].Name %></span>
+        <div>Access Token is valid</div>
+        <div><%=Session["xero_organisation_name"]%></div>
     <% } else { %>
         <span>Not Connected</span>
     <% } %>
+    
 </div>
