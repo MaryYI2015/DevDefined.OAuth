@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using System.Xml.XPath;
 using DevDefined.OAuth.Consumer;
 using DevDefined.OAuth.Framework;
+using DevDefined.OAuth.Storage.Basic;
 using DevDefined.OAuth.Utility;
 
 namespace XeroScreencast
@@ -84,11 +85,11 @@ namespace XeroScreencast
 
 
             // 4. Use the request token and verification code to get an access token
-            TokenBase accessToken;
+            AccessToken accessToken;
 
             try
             {
-                accessToken = (TokenBase)consumerSession.ExchangeRequestTokenForAccessToken(requestToken, verificationCode);
+                accessToken = consumerSession.ExchangeRequestTokenForAccessToken(requestToken, verificationCode);
             }
             catch (OAuthException ex)
             {
@@ -121,7 +122,7 @@ namespace XeroScreencast
             // 5.1 Refresh the access token using the session handle
             try
             {
-                accessToken = (TokenBase)consumerSession.RenewAccessToken(accessToken, accessToken.SessionHandle);
+                accessToken = consumerSession.RenewAccessToken(accessToken, accessToken.SessionHandle);
 
                 Console.WriteLine("The access token has been refreshed");
                 Console.WriteLine("New Access Token: " + accessToken.Token);
