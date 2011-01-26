@@ -24,7 +24,7 @@
             <td><%=Html.Encode(item.Name) %></td>
             <td><%=Html.Encode(string.Format("{0} {1}", item.FirstName, item.LastName)) %></td>
             <td><%=Html.Encode(item.EmailAddress) %></td>
-            <td><%=Html.Encode(item.Phones.Where(phone => !phone.IsEmpty).FirstOrDefault().ToString())%></td>
+            <td><%=Html.Encode(item.Phones.Where(phone => !phone.IsEmpty).FirstOrDefault())%></td>
             <td>
                 <%= Html.ActionLink("Edit", "Edit", new { id=item.ContactID }) %> |
                 <%= Html.ActionLink("Details", "Details", new { id=item.ContactID })%>
