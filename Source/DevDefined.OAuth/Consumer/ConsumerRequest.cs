@@ -29,6 +29,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Xml.Linq;
 using DevDefined.OAuth.Framework;
@@ -251,6 +252,16 @@ namespace DevDefined.OAuth.Consumer
       }
             
       return ResponseBody;
+    }
+
+    public byte[] ToBytes(Encoding encoding)
+    {
+        if (string.IsNullOrEmpty(ResponseBody))
+        {
+            ResponseBody = ToWebResponse().ReadToEnd();
+        }
+
+        return encoding.GetBytes(ResponseBody);
     }
 
     void EnsureRequestHasNotBeenSignedYet()

@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Net;
+using System.Text;
 
 namespace DevDefined.OAuth.Utility
 {
@@ -23,7 +24,8 @@ namespace DevDefined.OAuth.Utility
 
     public static string ReadToEnd(this WebResponse response)
     {
-      return response.GetResponseStream().ReadToEnd();
+        return response.GetResponseStream().ReadToEnd();
     }
+
   }
 }

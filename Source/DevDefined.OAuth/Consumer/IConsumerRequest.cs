@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Net;
+using System.Text;
 using System.Xml.Linq;
 using DevDefined.OAuth.Framework;
 
@@ -10,10 +11,7 @@ namespace DevDefined.OAuth.Consumer
     {
         IOAuthConsumerContext ConsumerContext { get; }
         IOAuthContext Context { get; }
-        XDocument ToDocument();
-        byte[] ToBytes();
-        HttpWebResponse ToWebResponse();
-        NameValueCollection ToBodyParameters();
+
         RequestDescription GetRequestDescription();
         IConsumerRequest SignWithoutToken();
         IConsumerRequest SignWithToken();
@@ -23,5 +21,14 @@ namespace DevDefined.OAuth.Consumer
         Action<string> ResponseBodyAction { get; set; }
         string AcceptsType { get; set; }
         string RequestBody { get; set; }
+
+        // To Response Methods
+        XDocument ToDocument();
+        HttpWebResponse ToWebResponse();
+        NameValueCollection ToBodyParameters();
+
+        [Obsolete]
+        byte[] ToBytes();
+        byte[] ToBytes(Encoding encoding);
     }
 }
