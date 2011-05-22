@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Specialized;
+using System.IO;
 
 namespace DevDefined.OAuth.Consumer
 {
@@ -14,6 +15,7 @@ namespace DevDefined.OAuth.Consumer
     public string Method { get; set; }
     public string ContentType { get; set; }
     public string Body { get; set; }
+    public Stream RequestStream { get; set; }
     public NameValueCollection Headers { get; private set; }
   }
 }

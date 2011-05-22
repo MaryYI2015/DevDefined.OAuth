@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
+using System.IO;
 using System.Net;
 using DevDefined.OAuth.Framework;
 using DevDefined.OAuth.Utility;
@@ -77,6 +78,12 @@ namespace DevDefined.OAuth.Consumer
     public static IConsumerRequest WithBody(this IConsumerRequest request, string requestBody)
     {
         request.RequestBody = requestBody;
+        return request;
+    }
+
+    public static IConsumerRequest WithRequestStream(this IConsumerRequest request, Stream requestStream)
+    {
+        request.RequestStream = requestStream;
         return request;
     }
 
