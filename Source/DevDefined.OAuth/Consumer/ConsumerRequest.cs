@@ -26,11 +26,12 @@
 
 using System;
 using System.Collections.Specialized;
-using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Web;
 using System.Xml.Linq;
+
 using DevDefined.OAuth.Framework;
 using DevDefined.OAuth.Utility;
 
@@ -41,12 +42,22 @@ namespace DevDefined.OAuth.Consumer
     readonly IOAuthConsumerContext _consumerContext;
     readonly IOAuthContext _context;
     readonly IToken _token;
+    readonly ICertificateFactory _clientSslCertificateFactory;
 
     public ConsumerRequest(IOAuthContext context, IOAuthConsumerContext consumerContext, IToken token)
     {
       _context = context;
       _consumerContext = consumerContext;
       _token = token;
+      _clientSslCertificateFactory = null;
+    }
+
+    public ConsumerRequest(IOAuthContext context, IOAuthConsumerContext consumerContext, IToken token, ICertificateFactory clientSslCertificateFactory)
+    {
+        _context = context;
+        _consumerContext = consumerContext;
+        _token = token;
+        _clientSslCertificateFactory = clientSslCertificateFactory;
     }
 
     public IOAuthConsumerContext ConsumerContext
@@ -130,6 +141,17 @@ namespace DevDefined.OAuth.Consumer
         {
           request.Headers[key] = description.Headers[key];
         }
+      }
+
+      // Attach a client ssl certificate to the HttpWebRequest
+      if (_clientSslCertificateFactory != null)
+      {
+          X509Certificate2 certificate = _clientSslCertificateFactory.CreateCertificate();
+
+          if (certificate != null)
+          {
+              request.ClientCertificates.Add(certificate);
+          }
       }
 
       return request;

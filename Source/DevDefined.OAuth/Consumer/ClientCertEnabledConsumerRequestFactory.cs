@@ -1,7 +1,9 @@
-﻿using DevDefined.OAuth.Framework;
+﻿using System;
+using DevDefined.OAuth.Framework;
 
 namespace DevDefined.OAuth.Consumer
 {
+    [Obsolete("Use the normal ConsumerRequestFactory instead", true)]
     public class ClientCertEnabledConsumerRequestFactory : IConsumerRequestFactory
     {
         private readonly ICertificateFactory _certificateFactory;

@@ -1,8 +1,11 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using DevDefined.OAuth.Framework;
 
 namespace DevDefined.OAuth.Consumer
 {
+    [Obsolete("Use the normal ConsumerRequest instead", true)]
     public class ClientCertEnabledConsumerRequest : ConsumerRequest
     {
         private readonly ICertificateFactory _certificateFactory;
@@ -28,7 +31,7 @@ namespace DevDefined.OAuth.Consumer
         {
             var webReqeust = base.ToWebRequest();
 
-            var certificate = _certificateFactory.CreateCertificate();
+            X509Certificate2 certificate = _certificateFactory.CreateCertificate();
 
             // Attach the certificate to the HttpWebRequest
             if (certificate != null)
