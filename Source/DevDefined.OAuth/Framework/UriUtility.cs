@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -258,11 +259,12 @@ namespace DevDefined.OAuth.Framework
     /// <returns></returns>
     public static string NormalizeRequestParameters(IEnumerable<QueryParameter> parameters)
     {
+      IComparer<string> stringComparer = new LexicographicalByteValueStringComparer();
+
       IEnumerable<QueryParameter> orderedParameters = parameters
-        .OrderBy(x => x.Key)
-        .ThenBy(x => x.Value)
-        .Select(
-        x => new QueryParameter(x.Key, UrlEncode(x.Value)));
+        .OrderBy(x => x.Key, stringComparer)
+        .ThenBy(x => x.Value, stringComparer)
+        .Select(x => new QueryParameter(x.Key, UrlEncode(x.Value)));
 
       var builder = new StringBuilder();
 
@@ -335,5 +337,20 @@ namespace DevDefined.OAuth.Framework
 
       return builder.ToString();
     }
+
+    /// <summary>
+    /// Lexicographical byte value string comparer
+    /// </summary>
+    /// <remarks>
+    /// Adapted from http://stackoverflow.com/questions/839429/oauth-lexicographical-byte-value-ordering-in-c
+    /// </remarks>
+    private class LexicographicalByteValueStringComparer : IComparer<string> 
+    {
+        public int Compare(string x, string y)
+        {
+            return string.Compare(x, y, StringComparison.Ordinal);
+        }
+    }
+      
   }
 }
