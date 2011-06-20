@@ -50,7 +50,7 @@ namespace Xero.ScreencastWeb.Services
                 ConfigurationManager.AppSettings["XeroApiCallbackUrl"]);
 
             // Replace the default ConsumerRequestFactory with one that can construct a ConsumerRequest with Client SSL certificates.
-            oAuthSession.ConsumerRequestFactory = new ClientCertEnabledConsumerRequestFactory(CertificateRepository.GetClientSslCertificateFactory());
+            oAuthSession.ConsumerRequestFactory = new DefaultConsumerRequestFactory(CertificateRepository.GetClientSslCertificateFactory());
 
             return oAuthSession;    
         }

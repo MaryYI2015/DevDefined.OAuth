@@ -46,7 +46,7 @@ namespace XeroScreencast
                 Settings.Default.PartnerAccessTokenURI);
 
             // Replace the default ConsumerRequest factory with one that can create ConsumerRequest classes which use a client SSL certificate
-            consumerSession.ConsumerRequestFactory = new ClientCertEnabledConsumerRequestFactory(ClientSslCertificateFactory);
+            consumerSession.ConsumerRequestFactory = new DefaultConsumerRequestFactory(ClientSslCertificateFactory);
 
 
             // 1. Get a request token
