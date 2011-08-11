@@ -26,9 +26,11 @@
 
 using System;
 using System.Collections.Specialized;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Web;
 using System.Xml.Linq;
 
@@ -87,6 +89,7 @@ namespace DevDefined.OAuth.Consumer
       var request = (HttpWebRequest) WebRequest.Create(description.Url);
       request.Method = description.Method;
       request.UserAgent = _consumerContext.UserAgent;
+      request.ContentType = description.ContentType;
 
       if (!string.IsNullOrEmpty(AcceptsType))
       {
@@ -98,7 +101,7 @@ namespace DevDefined.OAuth.Consumer
           if (Context.Headers["If-Modified-Since"] != null)
           {
               string modifiedDateString = Context.Headers["If-Modified-Since"];
-              request.IfModifiedSince = DateTime.Parse(modifiedDateString);
+              request.IfModifiedSince = DateTime.Parse(modifiedDateString, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
           }
       }
       catch (Exception ex)
@@ -113,8 +116,6 @@ namespace DevDefined.OAuth.Consumer
 
       if (description.ContentType == Parameters.HttpFormEncoded)
       {
-        request.ContentType = description.ContentType;
-
         using (var writer = new StreamWriter(request.GetRequestStream()))
         {
           writer.Write(description.Body);
@@ -157,7 +158,7 @@ namespace DevDefined.OAuth.Consumer
       return request;
     }
 
-    public RequestDescription GetRequestDescription()
+    private RequestDescription GetRequestDescription()
     {
       if (string.IsNullOrEmpty(_context.Signature))
       {
@@ -171,13 +172,11 @@ namespace DevDefined.OAuth.Consumer
         }
       }
 
-      Uri uri = _context.GenerateUri();
-
-      var description = new RequestDescription
-        {
-          Url = uri,
-          Method = _context.RequestMethod
-        };
+      RequestDescription description = new RequestDescription
+      {
+         Url = _context.GenerateUri(),
+         Method = _context.RequestMethod
+      };
 
       if ((_context.FormEncodedParameters != null) && (_context.FormEncodedParameters.Count > 0))
       {
@@ -187,10 +186,12 @@ namespace DevDefined.OAuth.Consumer
       else if (!string.IsNullOrEmpty(RequestBody))
       {
           description.Body = UriUtility.UrlEncode(RequestBody);
+          description.ContentType = ContentType;
       }
       else if (RequestStream != null)
       {
           description.RequestStream = RequestStream;
+          description.ContentType = ContentType;
       }
 
       if (_consumerContext.UseHeaderForOAuthParameters)
@@ -278,6 +279,8 @@ namespace DevDefined.OAuth.Consumer
 
     private string ResponseBody { get; set; }
 
+    public string ContentType { get; set; }
+
     public override string ToString()
     {
       if (string.IsNullOrEmpty(ResponseBody))
@@ -288,12 +291,37 @@ namespace DevDefined.OAuth.Consumer
       return ResponseBody;
     }
 
+    public byte[] ToBytes(Encoding encoding)
+    {
+        if (string.IsNullOrEmpty(ResponseBody))
+        {
+            ResponseBody = ToWebResponse().ReadToEnd();
+        }
+
+        return encoding.GetBytes(ResponseBody);
+    }
+
     void EnsureRequestHasNotBeenSignedYet()
     {
       if (!string.IsNullOrEmpty(_context.Signature))
       {
         throw Error.ThisConsumerRequestHasAlreadyBeenSigned();
       }
+    }
+
+    private class RequestDescription
+    {
+        public RequestDescription()
+        {
+            Headers = new NameValueCollection();
+        }
+
+        public Uri Url { get; set; }
+        public string Method { get; set; }
+        public string ContentType { get; set; }
+        public string Body { get; set; }
+        public Stream RequestStream { get; set; }
+        public NameValueCollection Headers { get; private set; }
     }
   }
 }

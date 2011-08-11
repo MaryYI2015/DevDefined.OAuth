@@ -2,8 +2,8 @@ using DevDefined.OAuth.Framework;
 
 namespace DevDefined.OAuth.Consumer
 {
-    public class DefaultConsumerRequestFactory : IConsumerRequestFactory
-    {
+  public class DefaultConsumerRequestFactory : IConsumerRequestFactory
+  {
         readonly ICertificateFactory _clientSslCertificateFactory;
         static IConsumerRequestFactory _defaultInstance;
 
@@ -22,9 +22,9 @@ namespace DevDefined.OAuth.Consumer
             set { _defaultInstance = value; }
         }
 
-        public IConsumerRequest CreateConsumerRequest(IOAuthContext context, IOAuthConsumerContext consumerContext, IToken token)
-        {
+    public IConsumerRequest CreateConsumerRequest(IOAuthContext context, IOAuthConsumerContext consumerContext, IToken token)
+    {
             return new ConsumerRequest(context, consumerContext, token, _clientSslCertificateFactory);
-        }
     }
+  }
 }

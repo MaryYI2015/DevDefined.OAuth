@@ -30,10 +30,10 @@ namespace DevDefined.OAuth.Consumer
       return request.ForMethod("POST");
     }
 
-    static void ApplyParameters(NameValueCollection destination, object anonymousClass)
+    /*static void ApplyParameters(NameValueCollection destination, object anonymousClass)
     {
       ApplyParameters(destination, new ReflectionBasedDictionaryAdapter(anonymousClass));
-    }
+    }*/
 
     static void ApplyParameters(NameValueCollection destination, IDictionary additions)
     {
@@ -87,11 +87,17 @@ namespace DevDefined.OAuth.Consumer
         return request;
     }
 
-    public static IConsumerRequest WithFormParameters(this IConsumerRequest request, object anonymousClass)
+    public static IConsumerRequest WithContentType(this IConsumerRequest request, string contentType)
+    {
+        request.ContentType = contentType;
+        return request;
+    }
+
+    /*public static IConsumerRequest WithFormParameters(this IConsumerRequest request, object anonymousClass)
     {
       ApplyParameters(request.Context.FormEncodedParameters, anonymousClass);
       return request;
-    }
+    }*/
 
     public static IConsumerRequest WithQueryParameters(this IConsumerRequest request, IDictionary dictionary)
     {
@@ -99,11 +105,11 @@ namespace DevDefined.OAuth.Consumer
       return request;
     }
 
-    public static IConsumerRequest WithQueryParameters(this IConsumerRequest request, object anonymousClass)
+    /*public static IConsumerRequest WithQueryParameters(this IConsumerRequest request, object anonymousClass)
     {
       ApplyParameters(request.Context.QueryParameters, anonymousClass);
       return request;
-    }
+    }*/
 
     public static IConsumerRequest WithCookies(this IConsumerRequest request, IDictionary dictionary)
     {
@@ -111,11 +117,11 @@ namespace DevDefined.OAuth.Consumer
       return request;
     }
 
-    public static IConsumerRequest WithCookies(this IConsumerRequest request, object anonymousClass)
+    /*public static IConsumerRequest WithCookies(this IConsumerRequest request, object anonymousClass)
     {
       ApplyParameters(request.Context.Cookies, anonymousClass);
       return request;
-    }
+    }*/
 
     public static IConsumerRequest WithHeaders(this IConsumerRequest request, IDictionary dictionary)
     {
@@ -123,11 +129,11 @@ namespace DevDefined.OAuth.Consumer
       return request;
     }
 
-    public static IConsumerRequest WithHeaders(this IConsumerRequest request, object anonymousClass)
+    /*public static IConsumerRequest WithHeaders(this IConsumerRequest request, object anonymousClass)
     {
       ApplyParameters(request.Context.Headers, anonymousClass);
       return request;
-    }
+    }*/
 
     public static IConsumerRequest AlterContext(this IConsumerRequest request, Action<IOAuthContext> alteration)
     {
