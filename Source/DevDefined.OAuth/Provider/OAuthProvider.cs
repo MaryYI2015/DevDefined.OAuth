@@ -38,14 +38,20 @@ namespace DevDefined.OAuth.Provider
     readonly List<IContextInspector> _inspectors = new List<IContextInspector>();
     readonly ITokenStore _tokenStore;
 
-    public OAuthProvider(ITokenStore tokenStore, params IContextInspector[] inspectors)
+    public OAuthProvider(ITokenStore tokenStore, IContextInspector[] inspectors)
     {
       RequiresCallbackUrlInRequest = true;
 
-      if (tokenStore == null) throw new ArgumentNullException("tokenStore");
+      if (inspectors == null || inspectors.Length == 0)
+          throw new ArgumentNullException("inspectors");
+
+      if (tokenStore == null) 
+          throw new ArgumentNullException("tokenStore");
+
       _tokenStore = tokenStore;
 
-      if (inspectors != null) _inspectors.AddRange(inspectors);
+      if (inspectors != null) 
+          _inspectors.AddRange(inspectors);
     }
 
     public bool RequiresCallbackUrlInRequest { get; set; }
